@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+
+
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <title>Azafrán Mediterráneo — Calculadora</title>
+  <link rel="icon" type="image/png" href="https://i.postimg.cc/XvcymB5Q/icono-azafran.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,200,0,0" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+
+
+
+<body>
+
+  <!-- ── Línea separadora encima del header ── -->
+  <div class="top-separator" aria-hidden="true">
+    <div class="top-separator-inner"></div>
+  </div>
+
+  <!-- ── Fondos decorativos atmosféricos ── -->
+  <div class="noise"        aria-hidden="true"></div>
+  <div class="grid-overlay" aria-hidden="true"></div>
+  <div class="scanlines"    aria-hidden="true"></div>
+  <div class="orbs"         aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+  </div>
+
+  <!-- ── Partículas flotantes decorativas ── -->
+  <div class="particulas" aria-hidden="true">
+    <div class="particula"></div><div class="particula"></div><div class="particula"></div>
+    <div class="particula"></div><div class="particula"></div><div class="particula"></div>
+    <div class="particula"></div><div class="particula"></div>
+  </div>
+
+  <!-- ── Header fijo con logo adaptable al tema ── -->
+  <header class="header">
+    <div class="logo">
+      <img
+        class="logo-imagen-header logo-dark"
+        src="https://i.postimg.cc/0QJJKHFG/Fondo-transparente-letras-blancas.png"
+        alt="Azafrán Mediterráneo"
+        onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex';"
+      />
+      <img
+        class="logo-imagen-header logo-light"
+        src="https://i.postimg.cc/9MqqwNKt/logo-azafran.png"
+        alt="Azafrán Mediterráneo"
+        onerror="this.style.display='none';"
+      />
+      <div id="logo-fallback" style="display:none; align-items:center; gap:0.55rem;">
+        <div class="logo-icono-wrap" aria-hidden="true">
+          <span class="material-symbols-outlined">psychiatry</span>
+        </div>
+        <div class="logo-textos">
+          <span class="logo-nombre">Azafrán Mediterráneo</span>
+          <span class="logo-sub">CARLOS VALAROLO</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-tema" id="btnTema" onclick="toggleTema()" aria-label="Cambiar tema">
+      <span class="material-symbols-outlined" id="iconoTema">light_mode</span>
+    </button>
+  </header>
+
+  <!-- ── Scroll container: todas las páginas + footer al final ── -->
+  <div class="scroll-container" id="scrollContainer">
+
+    <!-- ══════════════════════════════════
+         PÁGINA 1 — HOME
+    ══════════════════════════════════ -->
+    <section class="pagina" id="paginaHome">
+      <div class="seccion-hero" id="inicio">
+        <div class="layout-hero">
+
+          <div class="zona-titulo">
+            <div class="glow-ring" aria-hidden="true"></div>
+
+            <div class="chip" aria-hidden="true">
+              <span class="chip-dot"></span>
+              <span>Calculadora profesional</span>
+            </div>
+
+            <!-- Logo hero con versión dual por tema (oscuro/claro) -->
+            <div class="logo-hero-wrap">
+              <img
+                class="logo-hero-img logo-hero-dark"
+                src="https://i.postimg.cc/0QJJKHFG/Fondo-transparente-letras-blancas.png"
+                alt="Azafrán Mediterráneo"
+                onerror="this.onerror=null; this.style.display='none';"
+              />
+              <img
+                class="logo-hero-img logo-hero-light"
+                src="https://i.postimg.cc/9MqqwNKt/logo-azafran.png"
+                alt="Azafrán Mediterráneo"
+                onerror="this.onerror=null; this.style.display='none';"
+              />
+            </div>
+
+            <div class="titulo-linea2">C A L C U L A D O R A</div>
+
+            <div class="linea-deco" aria-hidden="true">
+              <div class="linea-inner"></div>
+            </div>
+          </div>
+
+          <div><p>ㅤ</p></div>
+
+          <!-- ── Zona de botones: tres cards alineadas y centradas ── -->
+          <div class="zona-botones" aria-label="Opciones de cálculo">
+            <p class="seccion-label">Seleccioná una operación</p>
+
+            <div class="botones-fila-wrapper">
+              <div class="botones-fila">
+
+                <!-- Botón 01: Dinero → Bulbos -->
+                <button class="boton-card" aria-label="Calcular de dinero a bulbos" onclick="irA('paginaDineroBulbo')">
+                  <div class="card-glow" aria-hidden="true"></div>
+                  <div class="card-corner" aria-hidden="true"></div>
+                  <span class="card-tag">01</span>
+                  <div class="iconos-fila" aria-hidden="true">
+                    <div class="icono-wrap"><span class="material-symbols-outlined">payments</span></div>
+                    <span class="material-symbols-outlined icono-flecha">arrow_forward</span>
+                    <div class="icono-wrap"><span class="material-symbols-outlined">grass</span></div>
+                  </div>
+                  <span class="boton-titulo">Dinero → Bulbos</span>
+                  <span class="boton-sub">¿Cuántos bulbos obtengo?</span>
+                  <div class="card-progress" aria-hidden="true"><div class="card-progress-fill"></div></div>
+                </button>
+
+                <!-- Botón 02: Dinero → MIX -->
+                <button class="boton-card" aria-label="Calcular mix de bulbos" onclick="irA('paginaDineroMix')">
+                  <div class="card-glow" aria-hidden="true"></div>
+                  <div class="card-corner" aria-hidden="true"></div>
+                  <span class="card-tag">02</span>
+                  <div class="iconos-fila" aria-hidden="true">
+                    <div class="icono-wrap"><span class="material-symbols-outlined">payments</span></div>
+                    <span class="material-symbols-outlined icono-flecha">arrow_forward</span>
+                    <div class="icono-wrap"><span class="material-symbols-outlined">category</span></div>
+                  </div>
+                  <span class="boton-titulo">Dinero → MIX</span>
+                  <span class="boton-sub">¿Cuántos MIX obtengo?</span>
+                  <div class="card-progress" aria-hidden="true"><div class="card-progress-fill"></div></div>
+                </button>
+
+                <!-- Botón 03: Bulbos → Dinero -->
+                <button class="boton-card" aria-label="Calcular valor en dinero de los bulbos" onclick="irA('paginaBulboDinero')">
+                  <div class="card-glow" aria-hidden="true"></div>
+                  <div class="card-corner" aria-hidden="true"></div>
+                  <span class="card-tag">03</span>
+                  <div class="iconos-fila" aria-hidden="true">
+                    <div class="icono-wrap"><span class="material-symbols-outlined">grass</span></div>
+                    <span class="material-symbols-outlined icono-flecha">arrow_forward</span>
+                    <div class="icono-wrap"><span class="material-symbols-outlined">payments</span></div>
+                  </div>
+                  <span class="boton-titulo">Bulbo → Dinero</span>
+                  <span class="boton-sub">¿Cuánto valen mis bulbos?</span>
+                  <div class="card-progress" aria-hidden="true"><div class="card-progress-fill"></div></div>
+                </button>
+
+              </div>
+            </div><!-- /botones-fila-wrapper -->
+          </div>
+
+          <div><p>ㅤ</p></div>
+          <div><p>ㅤ</p></div>
+          <div><p>ㅤ</p></div>
+
+          <!-- ── Panel de precios de referencia ── -->
+          <!-- Las filas se generan dinámicamente por renderPreciosReferencia() en script.js -->
+          <div class="precio-ref-panel" aria-label="Precios de referencia">
+            <div class="precio-ref-header">
+              <span class="material-symbols-outlined">price_check</span>
+              <span>Precios de referencia</span>
+            </div>
+            <div class="precio-ref-filas" id="precioRefFilas">
+              <!-- Contenido generado por JS desde BULBOS + PRECIO_MIX -->
+            </div>
+          </div>
+
+        </div><!-- /layout-hero -->
+      </div>
+    </section><!-- /paginaHome -->
+
+
+    <!-- ══════════════════════════════════
+         SEPARADOR DECORATIVO
+    ══════════════════════════════════ -->
+    <div><p>ㅤ</p></div>
+    <div><p>ㅤ</p></div>
+    <div class="linea-separacion" aria-hidden="true">
+      <div class="linea-inner"></div>
+    </div>
+
+
+    <!-- ══════════════════════════════════
+         PÁGINA 2 — DINERO → BULBOS
+    ══════════════════════════════════ -->
+    <section class="pagina pagina-calc" id="paginaDineroBulbo">
+      <div class="db-layout">
+
+        <div class="db-titulo-wrap">
+          <div class="hud-corner hud-tl" aria-hidden="true"></div>
+          <div class="hud-corner hud-tr" aria-hidden="true"></div>
+          <div class="bd-titulo-seccion">
+            <span class="material-symbols-outlined bd-titulo-icono">payments</span>
+            Dinero
+            <span class="bd-flecha">→</span>
+            <span class="material-symbols-outlined bd-titulo-icono">grass</span>
+            Bulbos
+          </div>
+          <p class="db-subtitulo-sub">¿Cuántos bulbos <em>obtengo?</em></p>
+          <p class="db-subtitulo">Ingresá tu presupuesto y encontramos la mejor combinación</p>
+        </div>
+
+        <div class="db-input-wrap">
+          <div class="db-field">
+            <span class="db-signo">$</span>
+            <input
+              type="text"
+              id="inputDinero"
+              class="db-monto-input"
+              placeholder="Ingresá tu presupuesto..."
+              inputmode="numeric"
+              aria-label="Monto en pesos"
+              autocomplete="off"
+            />
+          </div>
+          <div class="db-char-hint" id="dbCharHint" aria-live="polite">máx. 10 dígitos</div>
+        </div>
+
+        <div class="db-vacio" id="dbVacio">
+          <span class="material-symbols-outlined">calculate</span>
+          <p>Ingresá un monto<br>para ver la mejor combinación</p>
+        </div>
+
+        <div class="db-resultado-panel" id="dbResultadoPanel">
+          <div class="db-resultado-header">
+            <span class="material-symbols-outlined">auto_awesome</span>
+            <span class="db-resultado-header-txt">Mejor combinación</span>
+          </div>
+          <div id="dbMixFilas"></div>
+          <div class="db-resultado-total" id="dbTotalRow"></div>
+        </div>
+
+        <div class="sec-controles">
+          <button class="btn-sec-volver" onclick="irA('paginaHome')">
+            <span class="material-symbols-outlined">arrow_back</span>
+            Volver
+          </button>
+          <button class="btn-sec-borrar" onclick="limpiarDineroBulbo()">
+            <span class="material-symbols-outlined">delete_sweep</span>
+            Borrar
+          </button>
+        </div>
+
+      </div>
+    </section><!-- /paginaDineroBulbo -->
+
+
+    <!-- ══════════════════════════════════
+         SEPARADOR DECORATIVO
+    ══════════════════════════════════ -->
+    <div class="linea-separacion" aria-hidden="true">
+      <div class="linea-inner"></div>
+    </div>
+
+
+    <!-- ══════════════════════════════════
+         PÁGINA 3 — DINERO → MIX
+    ══════════════════════════════════ -->
+    <section class="pagina pagina-calc" id="paginaDineroMix">
+      <div class="db-layout">
+
+        <div class="db-titulo-wrap">
+          <div class="hud-corner hud-tl" aria-hidden="true"></div>
+          <div class="hud-corner hud-tr" aria-hidden="true"></div>
+          <div class="bd-titulo-seccion">
+            <span class="material-symbols-outlined bd-titulo-icono">payments</span>
+            Dinero
+            <span class="bd-flecha">→</span>
+            <span class="material-symbols-outlined bd-titulo-icono">category</span>
+            MIX
+          </div>
+          <p class="db-subtitulo-sub">¿Cuántos MIX <em>obtengo?</em></p>
+          <p class="db-subtitulo">Al ingresar el monto distribuye tu presupuesto en partes iguales entre Calibre 1, 2 y 3 (MIX)</p>
+          <!-- Precio MIX generado dinámicamente por renderSubtituloMix() -->
+          <p class="pref-val" id="precioMixSubtitulo"></p>
+        </div>
+
+        <div class="db-input-wrap">
+          <div class="db-field">
+            <span class="db-signo">$</span>
+            <input
+              type="text"
+              id="inputDineroMix"
+              class="db-monto-input"
+              placeholder="Ingresá tu presupuesto..."
+              inputmode="numeric"
+              aria-label="Monto en pesos para mix"
+              autocomplete="off"
+            />
+          </div>
+          <div class="db-char-hint" id="dmCharHint" aria-live="polite">máx. 10 dígitos</div>
+        </div>
+
+        <div class="db-vacio" id="dmVacio">
+          <span class="material-symbols-outlined">category</span>
+          <p>Ingresá un monto<br>para ver el mix equitativo</p>
+        </div>
+
+        <div class="db-resultado-panel" id="dmResultadoPanel">
+          <div class="db-resultado-header">
+            <span class="material-symbols-outlined">balance</span>
+            <span class="db-resultado-header-txt">Mix equitativo · C1 = C2 = C3</span>
+          </div>
+          <div class="dm-formula-chip" id="dmFormulaChip" aria-live="polite"></div>
+          <div id="dmMixFilas"></div>
+          <div class="db-resultado-total" id="dmTotalRow"></div>
+        </div>
+
+        <div class="sec-controles">
+          <button class="btn-sec-volver" onclick="irA('paginaHome')">
+            <span class="material-symbols-outlined">arrow_back</span>
+            Volver
+          </button>
+          <button class="btn-sec-borrar" onclick="limpiarDineroMix()">
+            <span class="material-symbols-outlined">delete_sweep</span>
+            Borrar
+          </button>
+        </div>
+
+      </div>
+    </section><!-- /paginaDineroMix -->
+
+
+    <!-- ══════════════════════════════════
+         SEPARADOR DECORATIVO
+    ══════════════════════════════════ -->
+    <div class="linea-separacion" aria-hidden="true">
+      <div class="linea-inner"></div>
+    </div>
+
+
+    <!-- ══════════════════════════════════
+         PÁGINA 4 — BULBOS → DINERO
+    ══════════════════════════════════ -->
+    <section class="pagina pagina-calc" id="paginaBulboDinero">
+      <div class="bd-layout">
+
+        <div class="db-titulo-wrap">
+          <div class="hud-corner hud-tl" aria-hidden="true"></div>
+          <div class="hud-corner hud-tr" aria-hidden="true"></div>
+          <div class="bd-titulo-seccion">
+            <span class="material-symbols-outlined bd-titulo-icono">grass</span>
+            Bulbos
+            <span class="bd-flecha">→</span>
+            <span class="material-symbols-outlined bd-titulo-icono">payments</span>
+            Dinero
+          </div>
+          <p class="db-subtitulo-sub">¿Cuánto <em>valen</em> mis bulbos?</p>
+          <p class="db-subtitulo">Ingresá la cantidad de cada calibre para calcular el total</p>
+        </div>
+
+        <div class="bd-tabla-wrap">
+          <div class="hud-corner hud-tl" aria-hidden="true"></div>
+          <div class="hud-corner hud-tr" aria-hidden="true"></div>
+          <div class="hud-corner hud-bl" aria-hidden="true"></div>
+          <div class="hud-corner hud-br" aria-hidden="true"></div>
+
+          <div class="bd-header-fila" aria-hidden="true">
+            <span>Calibre</span>
+            <span>Cantidad</span>
+            <span>Precio/u</span>
+            <span class="bd-col-right">Importe</span>
+          </div>
+
+          <!-- Filas generadas dinámicamente por renderTablaBulboDinero() en script.js -->
+          <div id="bdFilasContenedor">
+            <!-- Contenido generado por JS desde BULBOS -->
+          </div>
+
+          <!-- Fila de total general -->
+          <div class="bd-total-fila">
+            <span class="bd-total-label">
+              <span class="material-symbols-outlined bd-total-icono">calculate</span>
+              TOTAL
+            </span>
+            <span class="bd-total-valor" id="bdTotalValor" aria-live="polite">$ 0</span>
+          </div>
+        </div>
+
+        <div class="sec-controles">
+          <button class="btn-sec-volver" onclick="irA('paginaHome')">
+            <span class="material-symbols-outlined">arrow_back</span>
+            Volver
+          </button>
+          <button class="btn-sec-borrar" onclick="limpiarBulboDinero()">
+            <span class="material-symbols-outlined">delete_sweep</span>
+            Borrar todo
+          </button>
+        </div>
+      </div>
+    </section><!-- /paginaBulboDinero -->
+
+
+    <!-- ══════════════════════════════════
+         FOOTER
+    ══════════════════════════════════ -->
+    <footer class="footer-global" role="contentinfo">
+      <div class="footer-top-line" aria-hidden="true">
+        <div class="footer-line-glow"></div>
+      </div>
+      <div class="footer-inner">
+        <div class="footer-creditos">
+          <span class="footer-chip">
+            <span class="material-symbols-outlined footer-chip-icon">code</span>
+            Desarrollado por
+          </span>
+          <div class="footer-devs">
+            <a class="footer-dev" href="mailto:brunovalarolo@gmail.com" aria-label="Email de Bruno Valarolo">
+              <span class="material-symbols-outlined footer-dev-icon">person</span>
+              <span class="footer-dev-alias">xBRUCAPOO</span>
+              <span class="footer-dev-mail">brunovalarolo@gmail.com</span>
+            </a>
+            <div class="footer-dev-sep" aria-hidden="true"> ㅤ|ㅤ </div>
+            <a class="footer-dev" href="mailto:britosjoaquin61@gmail.com" aria-label="Email de Joaquín Brito">
+              <span class="material-symbols-outlined footer-dev-icon">person</span>
+              <span class="footer-dev-alias">J_HØLA</span>
+              <span class="footer-dev-mail">britosjoaquin61@gmail.com</span>
+            </a>
+          </div>
+        </div>
+        <div class="footer-meta">
+          <span class="footer-version">v2.5 · 2026</span>
+          <div class="logo">
+            <img
+              class="logo-imagen-header logo-dark"
+              src="https://i.postimg.cc/0QJJKHFG/Fondo-transparente-letras-blancas.png"
+              alt="Azafrán Mediterráneo"
+              onerror="this.style.display='none';"
+            />
+            <img
+              class="logo-imagen-header logo-light"
+              src="https://i.postimg.cc/9MqqwNKt/logo-azafran.png"
+              alt="Azafrán Mediterráneo"
+              onerror="this.style.display='none';"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom-bar" aria-hidden="true"></div>
+    </footer>
+
+  </div><!-- /scroll-container -->
+
+  <script src="script.js"></script>
+</body>
+</html>
