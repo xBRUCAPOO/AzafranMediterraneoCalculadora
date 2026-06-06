@@ -1,30 +1,29 @@
 <!DOCTYPE html>
 <html lang="es" data-theme="dark">
-<!-- git hub es una garcha -->
-
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"/>
   <title>Azafrán Mediterráneo — Calculadora</title>
-  <link rel="icon" type="image/png" href="https://i.postimg.cc/XvcymB5Q/icono-azafran.png">
+
+  <link rel="icon" type="image/png" href="icono_azafran.png">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,200,0,0" rel="stylesheet"/>
+
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
   <link rel="stylesheet" href="style.css"/>
 </head>
 
-
-
 <body>
 
-  <!-- ── Línea separadora encima del header ── -->
   <div class="top-separator" aria-hidden="true">
     <div class="top-separator-inner"></div>
   </div>
 
-  <!-- ── Fondos decorativos atmosféricos ── -->
   <div class="noise"        aria-hidden="true"></div>
   <div class="grid-overlay" aria-hidden="true"></div>
   <div class="scanlines"    aria-hidden="true"></div>
@@ -35,7 +34,6 @@
     <div class="orb orb-4"></div>
   </div>
 
-  <!-- ── Partículas flotantes decorativas ── -->
   <div class="particulas" aria-hidden="true">
     <div class="particula"></div><div class="particula"></div><div class="particula"></div>
     <div class="particula"></div><div class="particula"></div><div class="particula"></div>
@@ -45,15 +43,19 @@
   <!-- ── Header fijo con logo adaptable al tema ── -->
   <header class="header">
     <div class="logo">
+      <!--
+        logo-dark  → letras BLANCAS  → Fondo-transparente-letras-blancas.png
+        logo-light → letras NEGRAS   → logo-azafran.png
+      -->
       <img
         class="logo-imagen-header logo-dark"
-        src="https://i.postimg.cc/0QJJKHFG/Fondo-transparente-letras-blancas.png"
+        src="Fondo-transparente-letras-blancas.png"
         alt="Azafrán Mediterráneo"
         onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex';"
       />
       <img
         class="logo-imagen-header logo-light"
-        src="https://i.postimg.cc/9MqqwNKt/logo-azafran.png"
+        src="logo-azafran.png"
         alt="Azafrán Mediterráneo"
         onerror="this.style.display='none';"
       />
@@ -73,7 +75,6 @@
     </button>
   </header>
 
-  <!-- ── Scroll container: todas las páginas + footer al final ── -->
   <div class="scroll-container" id="scrollContainer">
 
     <!-- ══════════════════════════════════
@@ -91,17 +92,20 @@
               <span>Calculadora profesional</span>
             </div>
 
-            <!-- Logo hero con versión dual por tema (oscuro/claro) -->
+            <!--
+              logo-hero-dark  → letras BLANCAS → Fondo-transparente-letras-blancas.png
+              logo-hero-light → letras NEGRAS  → logo-azafran.png
+            -->
             <div class="logo-hero-wrap">
               <img
                 class="logo-hero-img logo-hero-dark"
-                src="https://i.postimg.cc/0QJJKHFG/Fondo-transparente-letras-blancas.png"
+                src="Fondo-transparente-letras-blancas.png"
                 alt="Azafrán Mediterráneo"
                 onerror="this.onerror=null; this.style.display='none';"
               />
               <img
                 class="logo-hero-img logo-hero-light"
-                src="https://i.postimg.cc/9MqqwNKt/logo-azafran.png"
+                src="logo-azafran.png"
                 alt="Azafrán Mediterráneo"
                 onerror="this.onerror=null; this.style.display='none';"
               />
@@ -116,14 +120,12 @@
 
           <div><p>ㅤ</p></div>
 
-          <!-- ── Zona de botones: tres cards alineadas y centradas ── -->
           <div class="zona-botones" aria-label="Opciones de cálculo">
             <p class="seccion-label">Seleccioná una operación</p>
 
             <div class="botones-fila-wrapper">
               <div class="botones-fila">
 
-                <!-- Botón 01: Dinero → Bulbos -->
                 <button class="boton-card" aria-label="Calcular de dinero a bulbos" onclick="irA('paginaDineroBulbo')">
                   <div class="card-glow" aria-hidden="true"></div>
                   <div class="card-corner" aria-hidden="true"></div>
@@ -138,7 +140,6 @@
                   <div class="card-progress" aria-hidden="true"><div class="card-progress-fill"></div></div>
                 </button>
 
-                <!-- Botón 02: Dinero → MIX -->
                 <button class="boton-card" aria-label="Calcular mix de bulbos" onclick="irA('paginaDineroMix')">
                   <div class="card-glow" aria-hidden="true"></div>
                   <div class="card-corner" aria-hidden="true"></div>
@@ -153,7 +154,6 @@
                   <div class="card-progress" aria-hidden="true"><div class="card-progress-fill"></div></div>
                 </button>
 
-                <!-- Botón 03: Bulbos → Dinero -->
                 <button class="boton-card" aria-label="Calcular valor en dinero de los bulbos" onclick="irA('paginaBulboDinero')">
                   <div class="card-glow" aria-hidden="true"></div>
                   <div class="card-corner" aria-hidden="true"></div>
@@ -169,33 +169,26 @@
                 </button>
 
               </div>
-            </div><!-- /botones-fila-wrapper -->
+            </div>
           </div>
 
           <div><p>ㅤ</p></div>
           <div><p>ㅤ</p></div>
           <div><p>ㅤ</p></div>
 
-          <!-- ── Panel de precios de referencia ── -->
-          <!-- Las filas se generan dinámicamente por renderPreciosReferencia() en script.js -->
           <div class="precio-ref-panel" aria-label="Precios de referencia">
             <div class="precio-ref-header">
               <span class="material-symbols-outlined">price_check</span>
               <span>Precios de referencia</span>
             </div>
-            <div class="precio-ref-filas" id="precioRefFilas">
-              <!-- Contenido generado por JS desde BULBOS + PRECIO_MIX -->
-            </div>
+            <div class="precio-ref-filas" id="precioRefFilas"></div>
           </div>
 
-        </div><!-- /layout-hero -->
+        </div>
       </div>
-    </section><!-- /paginaHome -->
+    </section>
 
 
-    <!-- ══════════════════════════════════
-         SEPARADOR DECORATIVO
-    ══════════════════════════════════ -->
     <div><p>ㅤ</p></div>
     <div><p>ㅤ</p></div>
     <div class="linea-separacion" aria-hidden="true">
@@ -265,12 +258,9 @@
         </div>
 
       </div>
-    </section><!-- /paginaDineroBulbo -->
+    </section>
 
 
-    <!-- ══════════════════════════════════
-         SEPARADOR DECORATIVO
-    ══════════════════════════════════ -->
     <div class="linea-separacion" aria-hidden="true">
       <div class="linea-inner"></div>
     </div>
@@ -294,7 +284,6 @@
           </div>
           <p class="db-subtitulo-sub">¿Cuántos MIX <em>obtengo?</em></p>
           <p class="db-subtitulo">Al ingresar el monto distribuye tu presupuesto en partes iguales entre Calibre 1, 2 y 3 (MIX)</p>
-          <!-- Precio MIX generado dinámicamente por renderSubtituloMix() -->
           <p class="pref-val" id="precioMixSubtitulo"></p>
         </div>
 
@@ -341,12 +330,9 @@
         </div>
 
       </div>
-    </section><!-- /paginaDineroMix -->
+    </section>
 
 
-    <!-- ══════════════════════════════════
-         SEPARADOR DECORATIVO
-    ══════════════════════════════════ -->
     <div class="linea-separacion" aria-hidden="true">
       <div class="linea-inner"></div>
     </div>
@@ -385,12 +371,8 @@
             <span class="bd-col-right">Importe</span>
           </div>
 
-          <!-- Filas generadas dinámicamente por renderTablaBulboDinero() en script.js -->
-          <div id="bdFilasContenedor">
-            <!-- Contenido generado por JS desde BULBOS -->
-          </div>
+          <div id="bdFilasContenedor"></div>
 
-          <!-- Fila de total general -->
           <div class="bd-total-fila">
             <span class="bd-total-label">
               <span class="material-symbols-outlined bd-total-icono">calculate</span>
@@ -411,11 +393,11 @@
           </button>
         </div>
       </div>
-    </section><!-- /paginaBulboDinero -->
+    </section>
 
 
     <!-- ══════════════════════════════════
-         FOOTER
+          FOOTER
     ══════════════════════════════════ -->
     <footer class="footer-global" role="contentinfo">
       <div class="footer-top-line" aria-hidden="true">
@@ -443,16 +425,20 @@
         </div>
         <div class="footer-meta">
           <span class="footer-version">v2.5 · 2026</span>
+          <!--
+            footer-dark  → logo compacto "Am" → logo_azafran_calculadora2.png
+            footer-light → logo completo negro → logo-azafran.png
+          -->
           <div class="logo">
             <img
               class="logo-imagen-header logo-dark"
-              src="https://i.postimg.cc/0QJJKHFG/Fondo-transparente-letras-blancas.png"
+              src="logo_azafran_calculadora2.png"
               alt="Azafrán Mediterráneo"
               onerror="this.style.display='none';"
             />
             <img
               class="logo-imagen-header logo-light"
-              src="https://i.postimg.cc/9MqqwNKt/logo-azafran.png"
+              src="logo-azafran.png"
               alt="Azafrán Mediterráneo"
               onerror="this.style.display='none';"
             />

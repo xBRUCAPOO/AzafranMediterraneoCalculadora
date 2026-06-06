@@ -940,7 +940,7 @@ body {
   background: var(--tabla-bg);
   border: 1px solid var(--borde); border-radius: 20px; overflow: hidden;
   box-shadow: 0 8px 40px var(--sombra-card), inset 0 1px 0 rgba(255,255,255,0.04);
-  animation: aparecer 0.5s ease 0.1s both;
+  animation: aparecer 0.5s ease 0git push.1s both;
   position: relative;
 }
 
