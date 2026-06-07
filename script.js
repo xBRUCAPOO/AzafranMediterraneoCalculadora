@@ -1,7 +1,54 @@
 /* ════════════════════════════════════════════════════════
    script.js — Azafrán Mediterráneo v2.5
-   FUENTE ÚNICA DE VERDAD: BULBOS, BULBOS_MIX, PRECIO_MIX, DIVISOR_MIX
-   Todos los precios visibles en HTML se renderizan desde acá.
+   ────────────────────────────────────────────────────────
+   CORRECCIONES iOS + Cloudflare Workers aplicadas:
+
+   ─ H) irA() usa scrollIntoView como fallback
+         En Safari iOS, scrollContainer.scrollTo({ behavior:'smooth' })
+         a veces falla si el layout no terminó de pintarse.
+         Se agrega un try/catch: si scrollTo falla, se usa
+         scrollIntoView que Safari sí soporta correctamente.
+
+   ─ I) DOMContentLoaded envuelto en requestAnimationFrame
+         En Safari iOS el evento DOMContentLoaded puede dispararse
+         antes de que el layout esté calculado (especialmente con dvh).
+         El rAF garantiza que el DOM esté pintado antes de adjuntar
+         listeners y calcular offsets de scroll.
+
+   ─ J) NUEVO — Doble rAF para Safari iOS 16+
+         Safari iOS 16+ a veces necesita dos frames para que
+         dvh y el layout queden estabilizados. Se anida un
+         segundo requestAnimationFrame dentro del primero.
+
+   ─ K) NUEVO — Configuración de Cloudflare Worker
+         El problema de "URL no reconocida como link" en iPhone
+         se resuelve principalmente en el Worker, NO en el JS.
+         
+         En tu Worker de Cloudflare, los headers HTTP deben ser:
+         
+         export default {
+           async fetch(request, env) {
+             const response = await env.ASSETS.fetch(request);
+             const newHeaders = new Headers(response.headers);
+             newHeaders.set('Content-Security-Policy', 'upgrade-insecure-requests');
+             newHeaders.set('X-Content-Type-Options', 'nosniff');
+             newHeaders.set('X-Frame-Options', 'SAMEORIGIN');
+             newHeaders.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+             return new Response(response.body, {
+               status: response.status,
+               statusText: response.statusText,
+               headers: newHeaders,
+             });
+           }
+         }
+
+         O en wrangler.toml:
+         [[headers]]
+         for = "/*"
+           [headers.values]
+           Content-Security-Policy = "upgrade-insecure-requests"
+           X-Content-Type-Options = "nosniff"
+
 ════════════════════════════════════════════════════════ */
 
 /* ──────────────────────────────────────────────────────
@@ -21,13 +68,9 @@ const BULBOS_MIX = [
   { id: "n3", nombre: "Calibre 3", precio: 6300 },
 ];
 
-/* Precio del MIX que se muestra en tabla de referencia y subtítulo */
-const PRECIO_MIX = 12600;
-
-/* Divisor para la fórmula A = monto / DIVISOR_MIX */
+const PRECIO_MIX  = 12600;
 const DIVISOR_MIX = 4200;
 
-/* Máximo de dígitos "reales" (sin puntos de miles) */
 const MAX_DIGITOS_MONTO    = 10;
 const MAX_DIGITOS_CANTIDAD = 5;
 
@@ -127,36 +170,49 @@ function toggleTema() {
 }
 
 /* ══════════════════════════════════════════════════════
-   NAVEGACIÓN
+   NAVEGACIÓN — FIX H + J
+   scrollTo con doble fallback para Safari iOS.
+   
+   1° intento: scrollTo con behavior smooth (Chrome/FF/Edge)
+   2° intento: scrollIntoView (Safari iOS, siempre funciona)
+   
+   FIX J: El timeout de 50ms da tiempo al layout de dvh
+   para estabilizarse en Safari iOS 16+ antes de calcular
+   el offsetTop. Sin esto, offsetTop puede ser 0.
 ══════════════════════════════════════════════════════ */
 function irA(idSeccion) {
   const contenedor = document.getElementById("scrollContainer");
   const destino    = document.getElementById(idSeccion);
   if (!contenedor || !destino) return;
-  contenedor.scrollTo({ top: destino.offsetTop, behavior: "smooth" });
+
+  /* FIX J — pequeño delay para que el layout dvh esté listo */
+  setTimeout(function() {
+    try {
+      const top = destino.offsetTop;
+      contenedor.scrollTo({ top: top, behavior: "smooth" });
+    } catch (e) {
+      /* Fallback FIX H: scrollIntoView siempre funciona en Safari iOS */
+      destino.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, 50);
 }
 
 /* ══════════════════════════════════════════════════════
-   RENDER DINÁMICO — TABLA DE PRECIOS DE REFERENCIA (HOME)
-   Lee BULBOS + PRECIO_MIX y construye las filas en el DOM.
+   RENDER — TABLA DE PRECIOS DE REFERENCIA (HOME)
 ══════════════════════════════════════════════════════ */
-
 function renderPreciosReferencia() {
   const contenedor = document.getElementById("precioRefFilas");
   if (!contenedor) return;
 
-  /* Combinar BULBOS + fila MIX */
   const todasFilas = [
     ...BULBOS,
     { id: "mix", nombre: "MIX", precio: PRECIO_MIX }
   ];
-
-  /* Precio máximo para calcular ancho de barras */
   const maxPrecio = Math.max(...todasFilas.map(f => f.precio));
 
   let html = "";
   todasFilas.forEach(fila => {
-    const pct   = ((fila.precio / maxPrecio) * 95).toFixed(1); /* máx 95% visual */
+    const pct   = ((fila.precio / maxPrecio) * 95).toFixed(1);
     const label = fila.precio.toLocaleString("es-AR");
     html += `
       <div class="precio-ref-item">
@@ -167,15 +223,12 @@ function renderPreciosReferencia() {
         <span class="pref-val">$ ${label}</span>
       </div>`;
   });
-
   contenedor.innerHTML = html;
 }
 
 /* ══════════════════════════════════════════════════════
-   RENDER DINÁMICO — TABLA BULBOS→DINERO (Página 4)
-   Genera las filas a partir de BULBOS.
+   RENDER — TABLA BULBOS → DINERO (Página 4)
 ══════════════════════════════════════════════════════ */
-
 function renderTablaBulboDinero() {
   const contenedor = document.getElementById("bdFilasContenedor");
   if (!contenedor) return;
@@ -194,15 +247,16 @@ function renderTablaBulboDinero() {
           maxlength="6"
           aria-label="Cantidad de ${bulbo.nombre}"
           autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
         />
         <span class="bd-precio">$ ${precioFmt}</span>
         <span class="bd-importe" aria-live="polite">$ 0</span>
       </div>`;
   });
-
   contenedor.innerHTML = html;
 
-  /* Re-adjuntar listeners luego de renderizar */
   contenedor.querySelectorAll(".bd-input").forEach(inp => {
     inp.addEventListener("keydown", bloquearNoNumerico);
     inp.addEventListener("input", () => {
@@ -213,10 +267,8 @@ function renderTablaBulboDinero() {
 }
 
 /* ══════════════════════════════════════════════════════
-   RENDER DINÁMICO — SUBTÍTULO MIX (Página 3)
-   Muestra "MIX = $ X.XXX" leyendo PRECIO_MIX.
+   RENDER — SUBTÍTULO MIX (Página 3)
 ══════════════════════════════════════════════════════ */
-
 function renderSubtituloMix() {
   const el = document.getElementById("precioMixSubtitulo");
   if (el) el.textContent = `MIX = $ ${PRECIO_MIX.toLocaleString("es-AR")}`;
@@ -225,7 +277,6 @@ function renderSubtituloMix() {
 /* ══════════════════════════════════════════════════════
    MODO: BULBOS → DINERO
 ══════════════════════════════════════════════════════ */
-
 function calcularBulboDinero(inputEl) {
   const fila    = inputEl.closest(".bd-fila");
   const precio  = parseInt(fila.dataset.precio, 10);
@@ -234,7 +285,6 @@ function calcularBulboDinero(inputEl) {
 
   const spanImporte = fila.querySelector(".bd-importe");
   spanImporte.textContent = "$ " + importe.toLocaleString("es-AR");
-
   spanImporte.classList.remove("flash");
   void spanImporte.offsetWidth;
   spanImporte.classList.add("flash");
@@ -263,7 +313,6 @@ function limpiarBulboDinero() {
 /* ══════════════════════════════════════════════════════
    MODO: DINERO → BULBOS
 ══════════════════════════════════════════════════════ */
-
 function mejorCombinacion(presupuesto) {
   const excluidos  = ["Cormillos", "Calibre 4"];
   const permitidos = BULBOS
@@ -281,7 +330,6 @@ function mejorCombinacion(presupuesto) {
       restante -= cantidad * bulbo.precio;
     }
   }
-
   return { filas: resultado, vuelto: restante };
 }
 
@@ -357,7 +405,6 @@ function limpiarDineroBulbo() {
 /* ══════════════════════════════════════════════════════
    MODO: DINERO → MIX
 ══════════════════════════════════════════════════════ */
-
 function calcularDineroMix() {
   const monto          = rawValue(document.getElementById("inputDineroMix"));
   const panelVacio     = document.getElementById("dmVacio");
@@ -436,59 +483,71 @@ function limpiarDineroMix() {
 }
 
 /* ══════════════════════════════════════════════════════
-   INIT — se ejecuta al cargar el DOM
+   INIT — FIX I + J: doble requestAnimationFrame para Safari iOS
+   
+   FIX I: DOMContentLoaded + rAF garantiza que el DOM
+   esté pintado antes de adjuntar listeners.
+   
+   FIX J: El segundo rAF anidado es necesario en Safari
+   iOS 16+ donde dvh puede tardar dos frames en
+   estabilizarse. Sin esto, offsetTop de las secciones
+   puede calcularse como 0 y el scroll no funciona.
 ══════════════════════════════════════════════════════ */
 document.addEventListener("DOMContentLoaded", () => {
+  requestAnimationFrame(() => {     /* FIX I — primer frame */
+    requestAnimationFrame(() => {   /* FIX J — segundo frame para dvh en Safari iOS 16+ */
 
-  /* ── 1. Restaurar tema guardado ── */
-  const temaGuardado = localStorage.getItem("azafran-tema");
-  if (temaGuardado) {
-    document.documentElement.setAttribute("data-theme", temaGuardado);
-    const icono = document.getElementById("iconoTema");
-    if (icono) icono.textContent = temaGuardado === "light" ? "dark_mode" : "light_mode";
-  }
+      /* 1. Restaurar tema guardado */
+      const temaGuardado = localStorage.getItem("azafran-tema");
+      if (temaGuardado) {
+        document.documentElement.setAttribute("data-theme", temaGuardado);
+        const icono = document.getElementById("iconoTema");
+        if (icono) icono.textContent = temaGuardado === "light" ? "dark_mode" : "light_mode";
+      }
 
-  /* ── 2. Renderizar elementos dinámicos desde las constantes ── */
-  renderPreciosReferencia();  /* tabla de referencia en HOME */
-  renderTablaBulboDinero();   /* filas de la tabla Bulbos→Dinero */
-  renderSubtituloMix();       /* "MIX = $ X.XXX" en Dinero→MIX */
+      /* 2. Renderizar elementos dinámicos */
+      renderPreciosReferencia();
+      renderTablaBulboDinero();
+      renderSubtituloMix();
 
-  /* ── 3. Listeners para inputs de MONTO ── */
-  const inputDinero = document.getElementById("inputDinero");
-  if (inputDinero) {
-    inputDinero.addEventListener("keydown", bloquearNoNumerico);
-    inputDinero.addEventListener("input", () => {
-      aplicarFormatoMiles(inputDinero, MAX_DIGITOS_MONTO);
-      calcularDineroBulbo();
-    });
-  }
+      /* 3. Listeners inputs de monto */
+      const inputDinero = document.getElementById("inputDinero");
+      if (inputDinero) {
+        inputDinero.addEventListener("keydown", bloquearNoNumerico);
+        inputDinero.addEventListener("input", () => {
+          aplicarFormatoMiles(inputDinero, MAX_DIGITOS_MONTO);
+          calcularDineroBulbo();
+        });
+      }
 
-  const inputDineroMix = document.getElementById("inputDineroMix");
-  if (inputDineroMix) {
-    inputDineroMix.addEventListener("keydown", bloquearNoNumerico);
-    inputDineroMix.addEventListener("input", () => {
-      aplicarFormatoMiles(inputDineroMix, MAX_DIGITOS_MONTO);
-      calcularDineroMix();
-    });
-  }
+      const inputDineroMix = document.getElementById("inputDineroMix");
+      if (inputDineroMix) {
+        inputDineroMix.addEventListener("keydown", bloquearNoNumerico);
+        inputDineroMix.addEventListener("input", () => {
+          aplicarFormatoMiles(inputDineroMix, MAX_DIGITOS_MONTO);
+          calcularDineroMix();
+        });
+      }
 
-  /* ── 4. Interceptor global de PASTE ── */
-  document.addEventListener("paste", (e) => {
-    const target = e.target;
-    if (!target.matches(".bd-input, #inputDinero, #inputDineroMix")) return;
-    e.preventDefault();
+      /* 4. Interceptor global de PASTE */
+      document.addEventListener("paste", (e) => {
+        const target = e.target;
+        if (!target.matches(".bd-input, #inputDinero, #inputDineroMix")) return;
+        e.preventDefault();
 
-    const texto       = (e.clipboardData || window.clipboardData).getData("text");
-    const soloDigitos = texto.replace(/\D/g, "");
+        const texto       = (e.clipboardData || window.clipboardData).getData("text");
+        const soloDigitos = texto.replace(/\D/g, "");
 
-    let maxDigitos = MAX_DIGITOS_CANTIDAD;
-    if (target.id === "inputDinero" || target.id === "inputDineroMix") maxDigitos = MAX_DIGITOS_MONTO;
+        let maxDigitos = MAX_DIGITOS_CANTIDAD;
+        if (target.id === "inputDinero" || target.id === "inputDineroMix") maxDigitos = MAX_DIGITOS_MONTO;
 
-    const actual   = target.value.replace(/\D/g, "");
-    const combined = (actual + soloDigitos).slice(0, maxDigitos);
-    target.value   = combined;
+        const actual   = target.value.replace(/\D/g, "");
+        const combined = (actual + soloDigitos).slice(0, maxDigitos);
+        target.value   = combined;
 
-    target.dispatchEvent(new Event("input", { bubbles: true }));
-  });
+        target.dispatchEvent(new Event("input", { bubbles: true }));
+      });
 
+    }); /* fin segundo requestAnimationFrame — FIX J */
+  });   /* fin primer requestAnimationFrame — FIX I */
 });

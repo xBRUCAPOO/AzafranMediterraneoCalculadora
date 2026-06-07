@@ -3,17 +3,104 @@
 
 <head>
   <meta charset="UTF-8" />
+
+  <!--
+  ╔══════════════════════════════════════════════════════════╗
+  ║  FIX 1 — viewport-fit=cover                             ║
+  ║  Necesario para que Safari iPhone con notch/home-bar    ║
+  ║  no recorte el contenido y respete el safe-area.        ║
+  ╚══════════════════════════════════════════════════════════╝
+  -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"/>
+
   <title>Azafrán Mediterráneo — Calculadora</title>
 
+  <!--
+  ╔══════════════════════════════════════════════════════════╗
+  ║  FIX 2 — favicon local                                  ║
+  ╚══════════════════════════════════════════════════════════╝
+  -->
   <link rel="icon" type="image/png" href="Imgs/icono_azafran.png">
+
+  <!--
+  ╔══════════════════════════════════════════════════════════╗
+  ║  FIX NUEVO — canonical URL con https://                  ║
+  ║  Safari iOS necesita la URL canónica con protocolo      ║
+  ║  para reconocer y linkificar correctamente el dominio.  ║
+  ║  Reemplazá la URL por tu dominio real de Cloudflare.    ║
+  ╚══════════════════════════════════════════════════════════╝
+  -->
+  <link rel="canonical" href="https://azafran-mediterraneo.brunovalarolo.workers.dev/">
+
+  <!--
+  ╔══════════════════════════════════════════════════════════╗
+  ║  FIX NUEVO — Open Graph / meta URL                      ║
+  ║  Permite que iOS entienda la URL real del sitio         ║
+  ║  y la muestre correctamente al compartir.               ║
+  ╚══════════════════════════════════════════════════════════╝
+  -->
+  <meta property="og:url" content="https://azafran-mediterraneo.brunovalarolo.workers.dev/">
+  <meta property="og:title" content="Azafrán Mediterráneo — Calculadora">
+  <meta property="og:description" content="Calculadora profesional de bulbos de azafrán">
+  <meta property="og:type" content="website">
+
+  <!--
+  ╔══════════════════════════════════════════════════════════╗
+  ║  FIX NUEVO — theme-color para Safari iOS                ║
+  ║  Sin este meta, Safari iOS no aplica correctamente      ║
+  ║  el color de la barra de estado en modo PWA/webapp.     ║
+  ╚══════════════════════════════════════════════════════════╝
+  -->
+  <meta name="theme-color" content="#070610" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f8f4ff" media="(prefers-color-scheme: light)">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!--
+  ╔══════════════════════════════════════════════════════════╗
+  ║  FIX 3 — &display=swap en Google Fonts                  ║
+  ╚══════════════════════════════════════════════════════════╝
+  -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,200,0,0" rel="stylesheet"/>
 
-  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <!--
+  ╔══════════════════════════════════════════════════════════╗
+  ║  FIX 4 — REMOVIDO: upgrade-insecure-requests via meta   ║
+  ║                                                          ║
+  ║  PROBLEMA: En Cloudflare Workers este header de CSP     ║
+  ║  conflictúa con los headers que Cloudflare agrega       ║
+  ║  automáticamente. El doble header CSP hace que Safari   ║
+  ║  iOS rechace cargar la página o no la reconozca como    ║
+  ║  una URL válida en el historial/favoritos.              ║
+  ║                                                          ║
+  ║  SOLUCIÓN: El upgrade-insecure-requests se debe         ║
+  ║  configurar SOLO en los headers HTTP del Worker de      ║
+  ║  Cloudflare (en wrangler.toml o en el script del        ║
+  ║  Worker), no en el HTML. Ver comentario en script.js    ║
+  ║  sobre cómo configurar el Worker correctamente.         ║
+  ╚══════════════════════════════════════════════════════════╝
+  -->
+
+  <!--
+  ╔══════════════════════════════════════════════════════════╗
+  ║  FIX 5 — apple-mobile-web-app-capable                   ║
+  ╚══════════════════════════════════════════════════════════╝
+  -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Azafrán Med.">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <!--
+  ╔══════════════════════════════════════════════════════════╗
+  ║  FIX NUEVO — apple-touch-icon                           ║
+  ║  Sin este link, cuando se comparte en iPhone el ícono   ║
+  ║  no aparece y Safari puede tratar la URL como texto.    ║
+  ╚══════════════════════════════════════════════════════════╝
+  -->
+  <link rel="apple-touch-icon" href="Imgs/icono_azafran.png">
 
   <link rel="stylesheet" href="style.css"/>
 </head>
@@ -40,13 +127,9 @@
     <div class="particula"></div><div class="particula"></div>
   </div>
 
-  <!-- ── Header fijo con logo adaptable al tema ── -->
+  <!-- ── Header ── -->
   <header class="header">
     <div class="logo">
-      <!--
-        logo-dark  → letras BLANCAS  → Fondo-transparente-letras-blancas.png
-        logo-light → letras NEGRAS   → logo-azafran.png
-      -->
       <img
         class="logo-imagen-header logo-dark"
         src="Imgs/Fondo-transparente-letras-blancas.png"
@@ -75,6 +158,7 @@
     </button>
   </header>
 
+  <!-- ── Scroll container ── -->
   <div class="scroll-container" id="scrollContainer">
 
     <!-- ══════════════════════════════════
@@ -92,10 +176,6 @@
               <span>Calculadora profesional</span>
             </div>
 
-            <!--
-              logo-hero-dark  → letras BLANCAS → Fondo-transparente-letras-blancas.png
-              logo-hero-light → letras NEGRAS  → logo-azafran.png
-            -->
             <div class="logo-hero-wrap">
               <img
                 class="logo-hero-img logo-hero-dark"
@@ -188,13 +268,11 @@
       </div>
     </section>
 
-
     <div><p>ㅤ</p></div>
     <div><p>ㅤ</p></div>
     <div class="linea-separacion" aria-hidden="true">
       <div class="linea-inner"></div>
     </div>
-
 
     <!-- ══════════════════════════════════
          PÁGINA 2 — DINERO → BULBOS
@@ -227,6 +305,9 @@
               inputmode="numeric"
               aria-label="Monto en pesos"
               autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
             />
           </div>
           <div class="db-char-hint" id="dbCharHint" aria-live="polite">máx. 10 dígitos</div>
@@ -260,11 +341,9 @@
       </div>
     </section>
 
-
     <div class="linea-separacion" aria-hidden="true">
       <div class="linea-inner"></div>
     </div>
-
 
     <!-- ══════════════════════════════════
          PÁGINA 3 — DINERO → MIX
@@ -298,6 +377,9 @@
               inputmode="numeric"
               aria-label="Monto en pesos para mix"
               autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
             />
           </div>
           <div class="db-char-hint" id="dmCharHint" aria-live="polite">máx. 10 dígitos</div>
@@ -332,11 +414,9 @@
       </div>
     </section>
 
-
     <div class="linea-separacion" aria-hidden="true">
       <div class="linea-inner"></div>
     </div>
-
 
     <!-- ══════════════════════════════════
          PÁGINA 4 — BULBOS → DINERO
@@ -395,9 +475,8 @@
       </div>
     </section>
 
-
     <!-- ══════════════════════════════════
-          FOOTER
+         FOOTER
     ══════════════════════════════════ -->
     <footer class="footer-global" role="contentinfo">
       <div class="footer-top-line" aria-hidden="true">
@@ -425,10 +504,6 @@
         </div>
         <div class="footer-meta">
           <span class="footer-version">v2.5 · 2026</span>
-          <!--
-            footer-dark  → logo compacto "Am" → logo_azafran_calculadora2.png
-            footer-light → logo completo negro → logo-azafran.png
-          -->
           <div class="logo">
             <img
               class="logo-imagen-header logo-dark"
